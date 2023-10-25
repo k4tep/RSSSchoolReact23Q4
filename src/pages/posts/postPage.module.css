@@ -1,0 +1,6 @@
+.posts_container {
+  display: grid;
+  grid-template-columns: repeat(4, 20rem);
+  justify-content: space-evenly;
+  justify-items: center;
+}

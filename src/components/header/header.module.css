@@ -1,0 +1,9 @@
+.header_container {
+  background-color: lightblue;
+  display: flex;
+  align-items: center;
+}
+
+.img {
+  margin: 0.5rem;
+}

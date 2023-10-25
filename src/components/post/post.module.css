@@ -1,0 +1,19 @@
+.post_container {
+  margin: 1rem;
+  border: 0.1rem skyblue solid;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  padding: 0.5rem;
+}
+
+.post_text {
+  margin: 0.3rem;
+}
+
+.post_container:hover {
+  background-color: rgb(231, 248, 253);
+  cursor: pointer;
+}
