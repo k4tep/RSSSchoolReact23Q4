@@ -1,5 +1,6 @@
 export interface ApiData {
   data: IData[],
+  loading: boolean,
 }
 
 export interface IData {

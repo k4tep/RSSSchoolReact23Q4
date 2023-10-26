@@ -8,40 +8,48 @@ import classes from './postPage.module.css';
 class PostPage extends React.Component {
   state: ApiData = {
     data: [],
+    loading: false,
   };
 
   async componentDidMount() {
     try {
-      let data = await getCharactersList();
+      this.setState({ loading: true });
+      let data = await getCharactersList(
+        localStorage.getItem('searchItem') || ''
+      );
       this.setState({ data: data.results });
-      console.log(this.state.data);
+      this.setState({ loading: false });
     } catch (error) {
       console.log(error);
     }
   }
-  // componentDidUpdate() {
-  //   document.title = `Вы нажали ${this.state.count} раз`;
-  //   console.log(this.state.data);
-  // }
+
+  searchFunc = (search: string) => {
+    localStorage.setItem('searchItem', search);
+    this.componentDidMount();
+  };
 
   render() {
     return (
       <div>
-        <Header />
+        <Header search={this.searchFunc} />
         <div className={classes.posts_container}>
-          {this.state.data.length === 0 ? (
-            <h1>Loading...</h1>
+          {!this.state.loading ? (
+            this.state.data.length === 0 ? (
+              <h1>Here no resultes</h1>
+            ) : (
+              this.state.data.map((e, index) => (
+                <Post
+                  name={e.name}
+                  gender={e.gender}
+                  birth={e.birth_year}
+                  key={index}
+                />
+              ))
+            )
           ) : (
-            this.state.data.map((e, index) => (
-              <Post
-                name={e.name}
-                gender={e.gender}
-                birth={e.birth_year}
-                key={index}
-              />
-            ))
+            <h1>Loading...</h1>
           )}
-          {/* <Post /> */}
         </div>
       </div>
     );

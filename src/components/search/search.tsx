@@ -1,15 +1,12 @@
 import React, { createRef } from 'react';
 import classes from './search.module.css';
 
-class Search extends React.Component {
-  inputRef = createRef<HTMLInputElement>();
-  state = {
-    search: localStorage.getItem('searchItem'),
-  };
+type MyProps = {
+  search: (s: string) => void;
+};
 
-  handleSearchItem = () => {
-    localStorage.setItem('searchItem', this.inputRef.current?.value || '');
-  };
+class Search extends React.Component<MyProps> {
+  inputRef = createRef<HTMLInputElement>();
 
   render() {
     return (
@@ -19,11 +16,15 @@ class Search extends React.Component {
           className={classes.search_input}
           placeholder="Search..."
           list="SearchInput"
+          defaultValue={localStorage.getItem('searchItem') || ''}
         ></input>
         <datalist id="SearchInput">
-          <option id="tips">{this.state.search}</option>
+          <option id="tips">{localStorage.getItem('searchItem')}</option>
         </datalist>
-        <button className={classes.search_btn} onClick={this.handleSearchItem}>
+        <button
+          className={classes.search_btn}
+          onClick={() => this.props.search(this.inputRef.current?.value || '')}
+        >
           Search
         </button>
       </div>

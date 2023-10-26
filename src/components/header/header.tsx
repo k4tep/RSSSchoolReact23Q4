@@ -2,7 +2,11 @@ import React from 'react';
 import classes from './header.module.css';
 import Search from '../search/search';
 
-class Header extends React.Component {
+type MyProps = {
+  search: (s: string) => void;
+};
+
+class Header extends React.Component<MyProps> {
   render() {
     return (
       <div className={classes.header_container}>
@@ -11,7 +15,7 @@ class Header extends React.Component {
           alt="SW-Logo"
           className={classes.img}
         />
-        <Search />
+        <Search search={this.props.search} />
       </div>
     );
   }
