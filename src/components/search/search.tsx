@@ -5,31 +5,29 @@ type MyProps = {
   search: (s: string) => void;
 };
 
-class Search extends React.Component<MyProps> {
-  inputRef = createRef<HTMLInputElement>();
+function Search(props: MyProps) {
+  const inputRef = createRef<HTMLInputElement>();
 
-  render() {
-    return (
-      <div>
-        <input
-          ref={this.inputRef}
-          className={classes.search_input}
-          placeholder="Search..."
-          list="SearchInput"
-          defaultValue={localStorage.getItem('searchItem') || ''}
-        ></input>
-        <datalist id="SearchInput">
-          <option id="tips">{localStorage.getItem('searchItem')}</option>
-        </datalist>
-        <button
-          className={classes.search_btn}
-          onClick={() => this.props.search(this.inputRef.current?.value || '')}
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <input
+        ref={inputRef}
+        className={classes.search_input}
+        placeholder="Search..."
+        list="SearchInput"
+        defaultValue={localStorage.getItem('searchItem') || ''}
+      ></input>
+      <datalist id="SearchInput">
+        <option id="tips">{localStorage.getItem('searchItem')}</option>
+      </datalist>
+      <button
+        className={classes.search_btn}
+        onClick={() => props.search(inputRef.current?.value || '')}
+      >
+        Search
+      </button>
+    </div>
+  );
 }
 
 export default Search;

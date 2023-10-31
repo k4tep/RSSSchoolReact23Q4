@@ -1,4 +1,6 @@
-export default async function getCharactersList(name: string) {
+import { ApiResponse } from "../../interfaces/data";
+
+export default async function getCharactersList(name: string):Promise<ApiResponse> {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');

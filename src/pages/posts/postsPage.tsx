@@ -1,64 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Post from '../../components/post/post';
 import getCharactersList from '../../api/get/get-list';
-import { ApiData } from '../../interfaces/data';
+import { ApiResponse, IData } from '../../interfaces/data';
 import Header from '../../components/header/header';
 import classes from './postPage.module.css';
 import ErrorBoundary from '../../components/error/error';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
 
-class PostPage extends React.Component {
-  state: ApiData = {
-    data: [],
-    loading: false,
-  };
+function PostPage() {
+  const [data, setData] = useState<IData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<boolean>(false);
 
-  async componentDidMount() {
+  async function getList() {
+    setLoading(true);
     try {
-      this.setState({ loading: true });
       const data = await getCharactersList(
         localStorage.getItem('searchItem') || ''
       );
-      this.setState({ data: data.results });
-      this.setState({ loading: false });
+      setData(data.results);
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
   }
 
-  searchFunc = (search: string) => {
+  const searchFunc = (search: string) => {
     localStorage.setItem('searchItem', search);
-    this.componentDidMount();
+    setSearch(!search);
   };
 
-  render() {
-    return (
-      <div>
-        <Header search={this.searchFunc} />
-        <div className={classes.posts_container}>
-          {!this.state.loading ? (
-            this.state.data.length === 0 ? (
-              <h1>Here no resultes</h1>
-            ) : (
-              this.state.data.map((e, index) => (
-                <Post
-                  name={e.name}
-                  gender={e.gender}
-                  birth={e.birth_year}
-                  key={index}
-                />
-              ))
-            )
+  useEffect(() => {
+    getList();
+  }, [search]);
+
+  return (
+    <div>
+      <Header search={searchFunc} />
+      <div className={classes.posts_container}>
+        {!loading ? (
+          data.length === 0 ? (
+            <h1>Here no resultes</h1>
           ) : (
-            <h1>Loading...</h1>
-          )}
-        </div>
-        <ErrorBoundary>
-          <OpsyBtn />
-        </ErrorBoundary>
+            data.map((e, index) => (
+              <Post
+                name={e.name}
+                gender={e.gender}
+                birth={e.birth_year}
+                key={index}
+              />
+            ))
+          )
+        ) : (
+          <h1>Loading...</h1>
+        )}
       </div>
-    );
-  }
+      <ErrorBoundary>
+        <OpsyBtn />
+      </ErrorBoundary>
+    </div>
+  );
 }
 
 export default PostPage;

@@ -1,6 +1,8 @@
-export interface ApiData {
-  data: IData[];
-  loading: boolean;
+export interface ApiResponse{
+  count: number,
+  next: string | null,
+  previous: string | null,
+  results: IData[];
 }
 
 export interface IData {
