@@ -1,10 +1,9 @@
 import React from 'react';
 import Post from '../../components/post/post';
 import getCharactersList from '../../api/get/get-list';
-import { ApiData } from '../../interfaces/data';
+import { ApiData, ApiResponse } from '../../interfaces/data';
 import Header from '../../components/header/header';
 import classes from './postPage.module.css';
-import ErrorBoundary from '../../components/error/error';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
 
 class PostPage extends React.Component {
@@ -16,7 +15,7 @@ class PostPage extends React.Component {
   async componentDidMount() {
     try {
       this.setState({ loading: true });
-      const data = await getCharactersList(
+      const data: ApiResponse = await getCharactersList(
         localStorage.getItem('searchItem') || ''
       );
       this.setState({ data: data.results });
@@ -53,9 +52,7 @@ class PostPage extends React.Component {
             <h1>Loading...</h1>
           )}
         </div>
-        <ErrorBoundary>
-          <OpsyBtn />
-        </ErrorBoundary>
+        <OpsyBtn />
       </div>
     );
   }

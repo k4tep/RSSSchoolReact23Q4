@@ -3,6 +3,13 @@ export interface ApiData {
   loading: boolean;
 }
 
+export interface ApiResponse {
+  count: number,
+  next: string | null,
+  previous: string | null,
+  results: IData[]
+}
+
 export interface IData {
   name: string;
   birth_year: string;

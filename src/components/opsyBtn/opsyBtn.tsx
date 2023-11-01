@@ -3,18 +3,22 @@ import classes from './opsyBtn.module.css';
 import ErrorBoundary from '../error/error';
 
 class OpsyBtn extends React.Component {
+  state = {
+    error: false,
+  };
+
   render() {
     return (
       <ErrorBoundary>
         <button
           className={classes.error_btn}
           onClick={() => {
-            localStorage.setItem('error', 'true');
+            this.setState({ error: true });
           }}
         >
           DON'T THINK OF PRESSING THIS BUTTON
         </button>
-        {localStorage.getItem('error') ? <Error></Error> : <></>}
+        {this.state.error ? <Error></Error> : <></>}
       </ErrorBoundary>
     );
   }
@@ -22,7 +26,7 @@ class OpsyBtn extends React.Component {
 
 class Error extends React.Component {
   componentDidMount() {
-    localStorage.removeItem('error');
+    this.setState({ error: false });
     throw new Error('Oops, you clicked the wrong button');
   }
 
