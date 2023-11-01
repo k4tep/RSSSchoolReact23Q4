@@ -1,6 +1,5 @@
 import React from 'react';
 import classes from './opsyBtn.module.css';
-import ErrorBoundary from '../error/error';
 
 class OpsyBtn extends React.Component {
   state = {
@@ -9,7 +8,7 @@ class OpsyBtn extends React.Component {
 
   render() {
     return (
-      <ErrorBoundary>
+      <>
         <button
           className={classes.error_btn}
           onClick={() => {
@@ -19,7 +18,7 @@ class OpsyBtn extends React.Component {
           DON'T THINK OF PRESSING THIS BUTTON
         </button>
         {this.state.error ? <Error></Error> : <></>}
-      </ErrorBoundary>
+      </>
     );
   }
 }
