@@ -1,38 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import Post from '../../components/post/post';
 import getCharactersList from '../../api/get/get-list';
-import { ApiResponse, IData } from '../../interfaces/data';
+import { IData } from '../../interfaces/data';
 import Header from '../../components/header/header';
 import classes from './postPage.module.css';
 import ErrorBoundary from '../../components/error/error';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
+import Pagination from '../../components/pagination/pagination';
 
 function PostPage() {
   const [data, setData] = useState<IData[]>([]);
+  const [pages, setPages] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState<boolean>(false);
 
-  async function getList() {
-    setLoading(true);
-    try {
-      const data = await getCharactersList(
-        localStorage.getItem('searchItem') || ''
-      );
-      setData(data.results);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  }
-
   const searchFunc = (search: string) => {
     localStorage.setItem('searchItem', search);
+    if (localStorage.getItem('searchItem') !== '') {
+      setPage(1);
+    }
     setSearch(!search);
   };
 
   useEffect(() => {
+    async function getList() {
+      setLoading(true);
+      try {
+        const data = await getCharactersList(
+          localStorage.getItem('searchItem') || '',
+          page
+        );
+        setPages(data.count);
+        setData(data.results);
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
+    }
     getList();
-  }, [search]);
+  }, [search, page]);
 
   return (
     <div>
@@ -58,6 +65,11 @@ function PostPage() {
       <ErrorBoundary>
         <OpsyBtn />
       </ErrorBoundary>
+      <Pagination
+        countOfPages={pages}
+        currPage={page}
+        newCurrPage={setPage}
+      ></Pagination>
     </div>
   );
 }

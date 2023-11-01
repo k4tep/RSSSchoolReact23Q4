@@ -1,7 +1,7 @@
-export interface ApiResponse{
-  count: number,
-  next: string | null,
-  previous: string | null,
+export interface ApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
   results: IData[];
 }
 
