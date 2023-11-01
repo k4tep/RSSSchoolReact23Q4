@@ -4,13 +4,10 @@ import getCharactersList from '../../api/get/get-list';
 import { IData } from '../../interfaces/data';
 import Header from '../../components/header/header';
 import classes from './postPage.module.css';
-import ErrorBoundary from '../../components/error/error';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
 import Pagination from '../../components/pagination/pagination';
-import { useNavigate } from 'react-router-dom';
 
 function PostPage() {
-  const navigate = useNavigate();
   const [data, setData] = useState<IData[]>([]);
   const [pages, setPages] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
@@ -28,7 +25,6 @@ function PostPage() {
   useEffect(() => {
     async function getList() {
       setLoading(true);
-      // navigate('/page' + page);
       try {
         const data = await getCharactersList(
           localStorage.getItem('searchItem') || '',
@@ -65,9 +61,7 @@ function PostPage() {
           <h1>Loading...</h1>
         )}
       </div>
-      <ErrorBoundary>
-        <OpsyBtn />
-      </ErrorBoundary>
+      <OpsyBtn />
       <Pagination
         countOfPages={pages}
         currPage={page}
