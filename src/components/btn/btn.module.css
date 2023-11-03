@@ -15,3 +15,17 @@
 .btn:hover {
   background-color: rgb(231, 248, 253);
 }
+
+.btn:hover:disabled {
+  background-color: skyblue;
+  cursor: default;
+}
+
+.a { 
+  text-decoration: none;
+  color: black;
+}
+
+.btn:disabled .a {
+  cursor: default;
+}

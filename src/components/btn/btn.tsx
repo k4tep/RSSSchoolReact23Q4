@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './btn.module.css';
+import { Link } from 'react-router-dom';
 
 type MyProps = {
   func: (params: number) => void;
@@ -16,7 +17,18 @@ function Btn(props: MyProps) {
       }}
       disabled={props.active}
     >
-      {props.pageNumber}
+      <Link
+        className={classes.a}
+        to={{
+          pathname: '/posts',
+          search: `?page=${props.pageNumber}`,
+        }}
+      >
+        {props.pageNumber}
+      </Link>
+      {/* <a className={classes.a} href={`#page_${props.pageNumber}`}>
+        {props.pageNumber}
+      </a> */}
     </button>
   );
 }

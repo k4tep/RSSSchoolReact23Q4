@@ -6,30 +6,33 @@ import Header from '../../components/header/header';
 import classes from './postPage.module.css';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
 import Pagination from '../../components/pagination/pagination';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function PostPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [data, setData] = useState<IData[]>([]);
   const [pages, setPages] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(Number(location.search.slice(6, 7)));
   const [loading, setLoading] = useState<boolean>(false);
-  const [search, setSearch] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>(location.search.slice(15));
 
-  const searchFunc = (search: string) => {
-    localStorage.setItem('searchItem', search);
-    if (localStorage.getItem('searchItem') !== '') {
-      setPage(1);
-    }
-    setSearch(!search);
+  const searchFunc = (searchText: string) => {
+    setPage(1);
+    setSearch(searchText);
   };
+
+  if (search.length >= 1 && page > 1) {
+    setPage(1);
+  }
 
   useEffect(() => {
     async function getList() {
       setLoading(true);
+      console.log(page);
+
       try {
-        const data = await getCharactersList(
-          localStorage.getItem('searchItem') || '',
-          page
-        );
+        const data = await getCharactersList(search, page);
         setPages(data.count);
         setData(data.results);
       } catch (error) {
@@ -37,8 +40,9 @@ function PostPage() {
       }
       setLoading(false);
     }
+    navigate(`/posts?page=${page}&search=${search}`);
     getList();
-  }, [search, page]);
+  }, [search, page, navigate]);
 
   return (
     <div>

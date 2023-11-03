@@ -21,3 +21,8 @@
 .search_btn:hover {
   background-color: rgb(231, 248, 253);
 }
+
+.a { 
+  text-decoration: none;
+  color: black;
+}

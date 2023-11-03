@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import classes from './search.module.css';
+import { useLocation } from 'react-router-dom';
 
 type MyProps = {
   search: (s: string) => void;
@@ -7,6 +8,7 @@ type MyProps = {
 
 function Search(props: MyProps) {
   const inputRef = createRef<HTMLInputElement>();
+  const location = useLocation();
 
   return (
     <div>
@@ -14,12 +16,8 @@ function Search(props: MyProps) {
         ref={inputRef}
         className={classes.search_input}
         placeholder="Search..."
-        list="SearchInput"
-        defaultValue={localStorage.getItem('searchItem') || ''}
+        defaultValue={location.search.slice(15) || ''}
       ></input>
-      <datalist id="SearchInput">
-        <option id="tips">{localStorage.getItem('searchItem')}</option>
-      </datalist>
       <button
         className={classes.search_btn}
         onClick={() => props.search(inputRef.current?.value || '')}
