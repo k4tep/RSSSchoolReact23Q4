@@ -16,7 +16,9 @@ function Search(props: MyProps) {
         ref={inputRef}
         className={classes.search_input}
         placeholder="Search..."
-        defaultValue={location.search.slice(15) || ''}
+        defaultValue={
+          location.search.match(/%27.*%27/)?.[0].slice(3, length - 3) || ''
+        }
       ></input>
       <button
         className={classes.search_btn}

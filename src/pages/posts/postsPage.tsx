@@ -6,16 +6,23 @@ import Header from '../../components/header/header';
 import classes from './postPage.module.css';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
 import Pagination from '../../components/pagination/pagination';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 function PostPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const searchInfo = location.search.match(/%27.*%27/)?.[0] || '';
   const [data, setData] = useState<IData[]>([]);
   const [pages, setPages] = useState<number>(0);
-  const [page, setPage] = useState<number>(Number(location.search.slice(6, 7)));
+  const [page, setPage] = useState<number>(
+    Number(location.search.slice(6, 7)) === 0
+      ? 1
+      : Number(location.search.slice(6, 7))
+  );
   const [loading, setLoading] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>(location.search.slice(15));
+  const [search, setSearch] = useState<string>(
+    searchInfo.slice(3, length - 3) || ''
+  );
 
   const searchFunc = (searchText: string) => {
     setPage(1);
@@ -29,8 +36,6 @@ function PostPage() {
   useEffect(() => {
     async function getList() {
       setLoading(true);
-      console.log(page);
-
       try {
         const data = await getCharactersList(search, page);
         setPages(data.count);
@@ -40,13 +45,15 @@ function PostPage() {
       }
       setLoading(false);
     }
-    navigate(`/posts?page=${page}&search=${search}`);
+    navigate(`/posts?page=${page}&search='${search}'`);
     getList();
-  }, [search, page, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, page]);
 
   return (
     <div>
       <Header search={searchFunc} />
+      <Outlet />
       <div className={classes.posts_container}>
         {!loading ? (
           data.length === 0 ? (
@@ -57,6 +64,7 @@ function PostPage() {
                 name={e.name}
                 gender={e.gender}
                 birth={e.birth_year}
+                url={e.url}
                 key={index}
               />
             ))
