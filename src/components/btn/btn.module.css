@@ -1,0 +1,31 @@
+.btn {
+  border: 0.1rem solid skyblue;
+  background-color: white;
+  border-radius: 0.5rem;
+  font-size: large;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  background-color: skyblue;
+}
+
+.btn:hover {
+  background-color: rgb(231, 248, 253);
+}
+
+.btn:hover:disabled {
+  background-color: skyblue;
+  cursor: default;
+}
+
+.a {
+  text-decoration: none;
+  color: black;
+}
+
+.btn:disabled .a {
+  cursor: default;
+}
