@@ -1,9 +1,11 @@
-import './App.css';
+import PostPage from './pages/posts/postsPage';
 
 function App() {
   return (
     <>
-      <div></div>
+      <div>
+        <PostPage />
+      </div>
     </>
   );
 }
