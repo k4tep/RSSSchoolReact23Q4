@@ -7,6 +7,8 @@ import classes from './postPage.module.css';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
 import Pagination from '../../components/pagination/pagination';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { SearchContext } from '../../contexts/searchContext';
+import { APIContext } from '../../contexts/apiContext';
 
 function PostPage() {
   const navigate = useNavigate();
@@ -52,7 +54,10 @@ function PostPage() {
 
   return (
     <div>
-      <Header search={searchFunc} />
+      <SearchContext.Provider value={search}>
+        <Header search={searchFunc} />
+      </SearchContext.Provider>
+
       <Outlet />
       <div className={classes.posts_container}>
         {!loading ? (
@@ -60,13 +65,17 @@ function PostPage() {
             <h1>Here no resultes</h1>
           ) : (
             data.map((e, index) => (
-              <Post
-                name={e.name}
-                gender={e.gender}
-                birth={e.birth_year}
-                url={e.url}
+              <APIContext.Provider
+                value={{
+                  name: e.name,
+                  gender: e.gender,
+                  birth: e.birth_year,
+                  url: e.url,
+                }}
                 key={index}
-              />
+              >
+                <Post />
+              </APIContext.Provider>
             ))
           )
         ) : (

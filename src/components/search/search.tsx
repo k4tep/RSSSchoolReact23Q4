@@ -1,6 +1,6 @@
-import React, { createRef } from 'react';
+import React, { createRef, useContext } from 'react';
 import classes from './search.module.css';
-import { useLocation } from 'react-router-dom';
+import { SearchContext } from '../../contexts/searchContext';
 
 type MyProps = {
   search: (s: string) => void;
@@ -8,7 +8,7 @@ type MyProps = {
 
 function Search(props: MyProps) {
   const inputRef = createRef<HTMLInputElement>();
-  const location = useLocation();
+  const search = useContext(SearchContext);
 
   return (
     <div>
@@ -16,9 +16,7 @@ function Search(props: MyProps) {
         ref={inputRef}
         className={classes.search_input}
         placeholder="Search..."
-        defaultValue={
-          location.search.match(/%27.*%27/)?.[0].slice(3, length - 3) || ''
-        }
+        defaultValue={search || ''}
       ></input>
       <button
         className={classes.search_btn}

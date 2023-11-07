@@ -26,9 +26,6 @@ function Btn(props: MyProps) {
       >
         {props.pageNumber}
       </Link>
-      {/* <a className={classes.a} href={`#page_${props.pageNumber}`}>
-        {props.pageNumber}
-      </a> */}
     </button>
   );
 }

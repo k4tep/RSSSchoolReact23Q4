@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classes from './post.module.css';
 import { Link } from 'react-router-dom';
+import { APIContext } from '../../contexts/apiContext';
 
 type MyProps = {
   name: string | undefined;
@@ -9,18 +10,18 @@ type MyProps = {
   url: string | undefined;
 };
 
-function Post(props: MyProps) {
+function Post() {
+  const { name, gender, birth, url } = useContext(APIContext) as MyProps;
+
   return (
     <div className={classes.post_container}>
       <img src="icons8-star-wars-250.png"></img>
-      <h1 className={classes.post_text}>{props.name || 'Unknown'}</h1>
-      <h3 className={classes.post_text}>{props.gender || 'Unknown'}</h3>
-      <h2 className={classes.post_text}>{props.birth || 'Unknown'}</h2>
+      <h1 className={classes.post_text}>{name || 'Unknown'}</h1>
+      <h3 className={classes.post_text}>{gender || 'Unknown'}</h3>
+      <h2 className={classes.post_text}>{birth || 'Unknown'}</h2>
       <Link
         className={classes.a}
-        to={`details/${props.url
-          ?.match(/\/\d*\/$/g)?.[0]
-          .slice(1, length - 1)}`}
+        to={`details/${url?.match(/\/\d*\/$/g)?.[0].slice(1, length - 1)}`}
       >
         Open
       </Link>

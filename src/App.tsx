@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import PostPage from './pages/posts/postsPage';
 import PostModal from './components/postModal/postModal';
+import React from 'react';
 
 function App() {
   return (
