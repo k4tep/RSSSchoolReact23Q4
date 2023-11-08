@@ -54,8 +54,8 @@ function PostPage() {
 
   return (
     <div>
-      <SearchContext.Provider value={search}>
-        <Header search={searchFunc} />
+      <SearchContext.Provider value={{ search, searchFunc }}>
+        <Header />
       </SearchContext.Provider>
 
       <Outlet />

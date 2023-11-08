@@ -3,7 +3,7 @@ import classes from './post.module.css';
 import { Link } from 'react-router-dom';
 import { APIContext } from '../../contexts/apiContext';
 
-type MyProps = {
+type MyContext = {
   name: string | undefined;
   gender: string | undefined;
   birth: string | undefined;
@@ -11,7 +11,7 @@ type MyProps = {
 };
 
 function Post() {
-  const { name, gender, birth, url } = useContext(APIContext) as MyProps;
+  const { name, gender, birth, url } = useContext(APIContext) as MyContext;
 
   return (
     <div className={classes.post_container}>

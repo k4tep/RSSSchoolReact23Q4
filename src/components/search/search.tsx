@@ -2,13 +2,14 @@ import React, { createRef, useContext } from 'react';
 import classes from './search.module.css';
 import { SearchContext } from '../../contexts/searchContext';
 
-type MyProps = {
-  search: (s: string) => void;
+type MyContext = {
+  search: string;
+  searchFunc: (e: string) => void;
 };
 
-function Search(props: MyProps) {
+function Search() {
   const inputRef = createRef<HTMLInputElement>();
-  const search = useContext(SearchContext);
+  const { search, searchFunc } = useContext(SearchContext) as MyContext;
 
   return (
     <div>
@@ -20,7 +21,7 @@ function Search(props: MyProps) {
       ></input>
       <button
         className={classes.search_btn}
-        onClick={() => props.search(inputRef.current?.value || '')}
+        onClick={() => searchFunc(inputRef.current?.value || '')}
       >
         Search
       </button>
