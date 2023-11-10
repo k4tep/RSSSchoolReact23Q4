@@ -62,7 +62,7 @@ function PostPage() {
       <div className={classes.posts_container}>
         {!loading ? (
           data.length === 0 ? (
-            <h1>Here no resultes</h1>
+            <h1>Here no results</h1>
           ) : (
             data.map((e, index) => (
               <APIContext.Provider
