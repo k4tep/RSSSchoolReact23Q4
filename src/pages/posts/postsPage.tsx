@@ -27,6 +27,7 @@ function PostPage() {
   );
 
   const searchFunc = (searchText: string) => {
+    localStorage.setItem('searchItem', searchText);
     setPage(1);
     setSearch(searchText);
   };

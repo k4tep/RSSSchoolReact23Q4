@@ -1,26 +1,30 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
-import response from './response.json';
-import getCharactersList from './api/get/get-list';
-import { IData } from './interfaces/data';
+import React from 'react';
 
 describe('App', async () => {
   beforeEach(() => {
-    // global.fetch.mockReset();
+    screen.debug();
     render(<App />);
   });
 
-  it('Test 7.1. Check that a loading indicator is displayed while fetching data', async () => {
+  test('Test 7.1. Check that a loading indicator is displayed while fetching data', async () => {
     expect(await screen.findByText('Loading...')).toBeInTheDocument();
   });
 
-  it('Search is showing', () => {
+  test('Search is showing', () => {
     expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument;
     expect(screen.getByText('Search')).toBeInTheDocument();
   });
 
-  it('Test 5.2. Check that an appropriate message is displayed if no cards are present.', async () => {
+  test('Error btn is showing', () => {
+    expect(
+      screen.getByText("DON'T THINK OF PRESSING THIS BUTTON")
+    ).toBeInTheDocument();
+  });
+
+  test('Test 5.2. Check that an appropriate message is displayed if no cards are present.', async () => {
     const inputSearch = screen.findByPlaceholderText('Search...');
     const btnSearch = screen.getByText('Search');
     fireEvent.change(await inputSearch, { target: { value: 'Error' } });
@@ -28,20 +32,18 @@ describe('App', async () => {
     expect(await screen.findByText('Here no results')).toBeInTheDocument();
   });
 
-  it("Searched posts isn't showing", async () => {
+  test('Test 9.1. Verify that clicking the Search button saves the entered value to the local storage', async () => {
     const inputSearch = screen.findByPlaceholderText('Search...');
     const btnSearch = screen.getByText('Search');
-    fireEvent.change(await inputSearch, { target: { value: '' } });
+    fireEvent.change(await inputSearch, { target: { value: 'SomeText' } });
     fireEvent.click(btnSearch);
-    expect(await screen.findAllByText('Open')).toBeInTheDocument();
+    expect('SomeText').toStrictEqual(localStorage.getItem('searchItem'));
   });
 
-  // it('makes a GET request to fetch list and returns the result', async () => {
-  //   vi.spyOn(window, 'fetch').mockImplementationOnce(() => {
-  //     return Promise.resolve({
-  //       json: () => Promise.resolve(response),
-  //     } as Response);
-  //   });
-  //   expect(await screen.findAllByText('Open')).toBeInTheDocument();
-  // });
+  test('Test 9.2. Check that the component retrieves the value from the local storage upon mounting', async () => {
+    const inputSearch = (await screen.findByPlaceholderText(
+      'Search...'
+    )) as HTMLInputElement;
+    expect(inputSearch.value).toStrictEqual(localStorage.getItem('searchItem'));
+  });
 });
