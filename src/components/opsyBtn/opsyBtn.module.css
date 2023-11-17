@@ -1,0 +1,13 @@
+.error_btn {
+  border: 0.1rem solid darkred;
+  background-color: white;
+  border-radius: 0.5rem;
+  font-size: large;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.error_btn:hover {
+  background-color: rgb(128, 71, 71);
+}
