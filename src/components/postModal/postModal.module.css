@@ -1,0 +1,40 @@
+.post_modal_container {
+  position: fixed;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.527);
+}
+
+.post_container {
+  background-color: rgb(231, 248, 253);
+  border-radius: 0.5rem;
+  border: 0.5rem skyblue solid;
+  position: absolute;
+  left: 70%;
+  width: 30%;
+  height: 99%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.a {
+  border: 0.1rem skyblue solid;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  text-decoration: none;
+  color: black;
+  width: 90%;
+  text-align: center;
+}
