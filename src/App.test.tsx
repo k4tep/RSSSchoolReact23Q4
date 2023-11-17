@@ -4,15 +4,29 @@ import App from './App';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import ErrorPage from './pages/error/errorPage';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { IData, IStoreCharactersList } from './interfaces/data';
+import reducer, { changeViewMode } from './store/charactersListSlice';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import getCharacter from './api/get/get-character';
 
 describe('Testing App', async () => {
   beforeEach(() => {
     screen.debug();
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
   });
 
   test('Loading is showing', async () => {
-    expect(await screen.findByText('Loading...')).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'Please wait, the API is slow and this is its feature. Loading...'
+      )
+    ).toBeInTheDocument();
   });
 
   test('Search is showing', () => {
@@ -44,12 +58,67 @@ describe('Testing App', async () => {
       screen.getByText('Oops, you clicked the wrong button')
     ).toBeInTheDocument();
   });
+
+  test('View mode btn is showing', () => {
+    expect(screen.getByText('View mode:')).toBeInTheDocument();
+  });
+
+  test('View mode btn is working', async () => {
+    const btnViewMode = screen.getByLabelText('View mode:');
+    fireEvent.change(btnViewMode, { target: { value: 'all' } });
+
+    await waitFor(() => {
+      const element = screen.findAllByText('Open');
+      expect(element).toBeTruthy();
+    });
+  });
+
+  test('View mode btn is working for store', () => {
+    const previousState: IStoreCharactersList = {
+      results: [],
+      count: 0,
+      searchValue: '',
+      viewMode: 0,
+      loading: false,
+      error: null,
+    };
+
+    expect(reducer(previousState, changeViewMode(2)).viewMode).toEqual(2);
+  });
+
+  test('creates the action types', () => {
+    const fetchCharacter = createAsyncThunk<
+      IData,
+      number,
+      { rejectValue: string }
+    >('character/fetchCharacter', async function (id, { rejectWithValue }) {
+      try {
+        const response = await getCharacter(1);
+        return response;
+      } catch (error) {
+        return rejectWithValue(`Ops, ${error}`);
+      }
+    });
+    expect(fetchCharacter.fulfilled.type).toBe(
+      'character/fetchCharacter/fulfilled'
+    );
+    expect(fetchCharacter.pending.type).toBe(
+      'character/fetchCharacter/pending'
+    );
+    expect(fetchCharacter.rejected.type).toBe(
+      'character/fetchCharacter/rejected'
+    );
+  });
 });
 
 describe('Test 5. Tests for the Card List component', async () => {
   beforeEach(() => {
     screen.debug();
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
   });
 
   test('Test 5.1. Verify that the component renders the specified number of cards', async () => {
@@ -74,7 +143,11 @@ describe('Test 5. Tests for the Card List component', async () => {
 describe('Test 6. Tests for the Card component', async () => {
   beforeEach(() => {
     screen.debug();
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
   });
 
   test('Test 6.1. Ensure that the card component renders the relevant card data', async () => {
@@ -106,7 +179,11 @@ describe('Test 6. Tests for the Card component', async () => {
 describe('Test 7. Tests for the Detailed Card component', async () => {
   beforeEach(() => {
     screen.debug();
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
     waitFor(async () => {
       const element = await screen.findByText('Open');
       fireEvent.click(element);
@@ -140,7 +217,11 @@ describe('Test 7. Tests for the Detailed Card component', async () => {
 describe('Test 9. Tests for the Search component', async () => {
   beforeEach(() => {
     screen.debug();
-    render(<App />);
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
   });
 
   test('Test 9.1. Verify that clicking the Search button saves the entered value to the local storage', async () => {

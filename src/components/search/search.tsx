@@ -31,7 +31,6 @@ function Search() {
         onClick={() => {
           setupSearchValue();
           searchFunc(inputRef.current?.value || '');
-          console.log('Info' + searchInfo, 'Value' + searchValue);
         }}
       >
         Search
