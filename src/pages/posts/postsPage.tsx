@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import Post from '../../components/post/post';
-import getCharactersList from '../../api/get/get-list';
-import { IData } from '../../interfaces/data';
 import Header from '../../components/header/header';
 import classes from './postPage.module.css';
 import OpsyBtn from '../../components/opsyBtn/opsyBtn';
@@ -9,63 +8,59 @@ import Pagination from '../../components/pagination/pagination';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { SearchContext } from '../../contexts/searchContext';
 import { APIContext } from '../../contexts/apiContext';
+import { fetchCharactersList } from '../../store/charactersListSlice';
 
 function PostPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const searchInfo = location.search.match(/%27.*%27/)?.[0] || '';
-  const [data, setData] = useState<IData[]>([]);
-  const [pages, setPages] = useState<number>(0);
+  const dispatch = useAppDispatch();
+
+  const charactersList = useAppSelector(
+    (state) => state.charactersList.results
+  );
+  const count = useAppSelector((state) => state.charactersList.count);
+  const searchValue = useAppSelector(
+    (state) => state.charactersList.searchValue
+  );
+  const viewMode = useAppSelector((state) => state.charactersList.viewMode);
+  const loading = useAppSelector((state) => state.charactersList.loading);
+
+  const searchInfo =
+    location.search.match(/%27.*%27/)?.[0].slice(3, length - 3) || '';
   const [page, setPage] = useState<number>(
     Number(location.search.slice(6, 7)) === 0
       ? 1
       : Number(location.search.slice(6, 7))
   );
-  const [loading, setLoading] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>(
-    searchInfo.slice(3, length - 3) || ''
-  );
 
   const searchFunc = (searchText: string) => {
     localStorage.setItem('searchItem', searchText);
     setPage(1);
-    setSearch(searchText);
   };
 
-  if (search.length >= 1 && page > 1) {
+  if (searchValue.length >= 1 && page > 1) {
     setPage(1);
   }
 
   useEffect(() => {
-    async function getList() {
-      setLoading(true);
-      try {
-        const data = await getCharactersList(search, page);
-        setPages(data.count);
-        setData(data.results);
-      } catch (error) {
-        console.error(error);
-      }
-      setLoading(false);
-    }
-    navigate(`/posts?page=${page}&search='${search}'`);
-    getList();
+    navigate(`/posts?page=${page}&search='${searchValue}'`);
+    dispatch(fetchCharactersList({ search: searchValue, page }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, page]);
+  }, [searchValue, page, viewMode]);
 
   return (
     <div>
-      <SearchContext.Provider value={{ search, searchFunc }}>
+      <SearchContext.Provider value={{ searchInfo, searchFunc }}>
         <Header />
       </SearchContext.Provider>
 
       <Outlet />
       <div className={classes.posts_container}>
         {!loading ? (
-          data.length === 0 ? (
+          charactersList.length === 0 ? (
             <h1>Here no results</h1>
           ) : (
-            data.map((e, index) => (
+            charactersList.map((e, index) => (
               <APIContext.Provider
                 value={{
                   name: e.name,
@@ -80,12 +75,14 @@ function PostPage() {
             ))
           )
         ) : (
-          <h1>Loading...</h1>
+          <h1>
+            Please wait, the API is slow and this is its feature. Loading...
+          </h1>
         )}
       </div>
       <OpsyBtn />
       <Pagination
-        countOfPages={pages}
+        countOfPages={count}
         currPage={page}
         newCurrPage={setPage}
       ></Pagination>

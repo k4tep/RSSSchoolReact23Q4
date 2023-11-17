@@ -2,8 +2,33 @@
   background-color: lightblue;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .img {
   margin: 0.5rem;
+}
+
+.dropdown {
+  border: 0.1rem solid skyblue;
+  background-color: white;
+  border-radius: 0.5rem;
+  font-size: large;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.dropdown:hover {
+  background-color: rgb(231, 248, 253);
+}
+
+.label {
+  font-size: 1.2rem;
+  font-family: Arial;
+}
+
+.container {
+  display: flex;
+  align-items: center;
 }
